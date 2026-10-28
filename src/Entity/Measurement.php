@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MeasurementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MeasurementRepository::class)]
 class Measurement
@@ -19,9 +20,12 @@ class Measurement
     private ?Location $location = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'Data jest wymagana.', groups: ['new', 'edit'])]
     private ?\DateTime $date = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Temperatura jest wymagana.', groups: ['new', 'edit'])]
+    #[Assert\Range(min: -100, max: 100, notInRangeMessage: 'Temperatura musi być pomiędzy {{ min }} a {{ max }}.', groups: ['new', 'edit'])]
     private ?int $celsius = null;
 
     #[ORM\Column]
